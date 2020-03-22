@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+	<title>Handwritten Digit Recognition</title>	
+</head>
+
+<body>
+    <h1 class=""><b>Write a Digit</h1>
+	
+		<div class="centered">
+			<canvas id="canvas" width="128" height="128"></canvas>
+		</div>
+
+		<div class="centered">
+			<input type="button" class="myButton" value="Predict" style="">
+			<input type="button" id="clearButton" value="Clear" style="" >
+			
+			<form action="http://127.0.0.1:5000/update" method="post">
+				<p>Correction <input type="text" name="actual"/></p>
+				<p><input type="submit" value="Submit"/></p>
+			</form>
+
+			</div>
+		</div>
+
+		<div class="centered">
+			<h1 id="result"></h1>
+		</div>
+
+
+  		<script src="{{url_for('static',filename='jquery-3.2.0.min.js')}}"></script>
+	    <script src="{{url_for('static',filename='index.js')}}"></script>
+	    <script type="text/javascript">
+	   		$(".myButton").click(function(){
+	   			$('#result').text('  Predicting...');
+	   			var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+	   			var canvasObj = document.getElementById("canvas"); <!-- canvas object saves the canvas>
+	   			var img = canvasObj.toDataURL('image/png');
+	   			$.ajax({ <!-- a jason object>
+	   				type: "POST",
+	   				url: $SCRIPT_ROOT + "/predictdigits/", <!-- this api is implemented in the backend > 
+	   				data: img, 
+	   				success: function(data){ <!-- return of the api is taken as the function(data) >
+	   					$('#result').text('Result: ' + data);
+	   				}
+	   			});
+	   		});
+	   </script>
+</body>
+</html>
